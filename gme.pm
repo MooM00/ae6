@@ -6,6 +6,12 @@ use warnings;
 package gme;
 use geNode;
 use geCommon;
+use WebPerl qw(js); 
+my $output=js('document')->getElementById('output');
+sub output(@) { 
+    $output->{innerHTML}.=join("",@_); 
+    $output->{scrollTop}=$output->{scrollHeight};
+}
 
 sub new {
     my $class = shift;
@@ -503,13 +509,17 @@ sub doOutput {
             if ( $line->[0] eq '\c' ) {
                 $eol  = '';
                 $line = $line->[1];
-            } elsif ( $line->[0] =~ /error|warning|bold/i ) {
-                $line = "** " . $line->[1] . " **\n";
+            } elsif ( $line->[0] =~ /error/i ) {
+                $line = "<p style='color:red'> " . $line->[1] . " </p>\n";
+            } elsif ( $line->[0] =~ /warn/i ) {
+                $line = "<p style='color:orange'> " . $line->[1] . " </p>\n";
+            } elsif ( $line->[0] =~ /bold/i ) {
+                $line = "<b> " . $line->[1] . " </b>\n";
             } else {
                 $line = "  [" . $line->[1] . "]\n";
             }
-        }
-        print $line, $eol if defined $line;
+	}
+        output ($line, $eol) if defined $line;
     }
 }
 

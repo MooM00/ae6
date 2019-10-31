@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-us">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>WebPerl Interactive Code Demo</title>
+<script src="/webperl.js"></script>
+<script type="text/perl" src="Martian_Mystery.json" argv2='-d' argv0='-f' argv1='Martian_Mystery.json'></script>
+<script type="text/perl" src="JSON.pm"></script>
+<script type="text/perl" src="JSON_PP.pm" path='JSON' filename='PP.pm'></script>
+<script type="text/perl" src="JSON_PP_Boolean.pm" path='JSON/PP' filename='Boolean.pm'></script>
+<script type="text/perl" src="geCan.pm"></script>
+<script type="text/perl" src="geCommon.pm"></script>
+<script type="text/perl" src="geConst.pm"></script>
+<script type="text/perl" src="geExit.pm"></script>
+<script type="text/perl" src="geIf.pm"></script>
+<script type="text/perl" src="geNode.pm"></script>
+<script type="text/perl" src="geSet.pm"></script>
+<script type="text/perl" src="geSum.pm"></script>
+<script type="text/perl" src="geTest.pm"></script>
+<script type="text/perl" src="gme.pm"></script>
+<script type="text/perl" src="ae6.pl" runme=1></script>
+</head>
+<body>
+
+<H3>Your Game:</H3>
+
+<script>
+var instring;
+window.onload=function (){
+    instring = document.getElementById("instring");
+    instring.addEventListener("keyup", function(event) {
+      if (event.keyCode === 13) { user_input(); }
+    });
+};
+function user_input() {
+    Perl.eval("$IF->{stdin}='"+instring.value+"';");
+    Perl.eval("getInput('"+instring.value+"');processInput();preInput;");
+    instring.value='';
+}
+</script>
+<pre id="output" style=" width: 600px; height: 400px; border-width: thin; border-style: solid; white-space: pre-wrap; overflow-y: auto;"></pre>
+
+<input type=text id=instring size="100" ></input>
+<input type=button id='go' onclick="user_input()" value='&#8626' />
+
+<p>This is a proof-of-concept of <a href="http://webperl.zero-g.net" target="_blank">WebPerl</a>!</p>
+
+</body>
+</html>

@@ -6,7 +6,11 @@ use strict;
 use warnings;
 use v5.14.0;
 no warnings 'experimental';
-use JSON;
+use JSON::PP;
+use WebPerl qw(js); 
+my $output=js('document')->getElementById('output');
+my $input=js('document')->getElementById('instring');
+sub output(@) { $output->{innerHTML}.=join("",@_); }
 
 $|=1;
 
@@ -15,7 +19,7 @@ use gme;
 our $DEBUG=0;
 my $IF=undef;
 
-sub usage() { print "$0 [-h] [-d] [-f <GaMEfile>] <command>; <command>...\n"}
+sub usage() { output( "$0 [-h] [-d] [-f <GaMEfile>] <command>; <command>...\n") }
 
 {
     my $data=undef;
@@ -59,6 +63,7 @@ sub usage() { print "$0 [-h] [-d] [-f <GaMEfile>] <command>; <command>...\n"}
 
 
 sub doOutput() {
+    $input->{disabled}=0;
     while (@{$IF->{stdout}}) { 
 	$IF->doOutput; 
 	if (($IF->{stdout}[0]//'')=~ /^\0 (.*)$/) {
@@ -66,11 +71,17 @@ sub doOutput() {
 	    given ($cmd) {
 		when ('pause') { splice (@{$IF->{stdout}},0,1,'--more--',"\0 paused"); }
 		when ('paused') { shift @{$IF->{stdout}}; return; }
-		when ('cls') { shift @{$IF->{stdout}}; system("cls"); }
-		when (/^[\d\.]+/) { shift @{$IF->{stdout}} ; select undef, undef, undef, $cmd; }
+		when ('cls') { shift @{$IF->{stdout}}; $output->{innerHTML}=""; }
+		when (/^[\d\.]+/) { 
+		    shift @{$IF->{stdout}} ;
+		    $input->{disabled}=1;
+		    js('window')->setTimeout("Perl.eval('doOutput();')",$cmd*1000);
+		    return;
+		}
 	    }
 	}
     }
+    $input->focus();
 }
 
 sub save_file($) {
@@ -108,7 +119,8 @@ if ($IF->{sys}{game_file} eq "\0NONE") {
     exit;
 }
 
-while (1) {
+
+sub preInput() {
     if ($IF->{sys}{force_new_room} or $IF->isNewRoom) {
 	$IF->{sys}{force_new_room}=0;
 	$IF->checkRoom;
@@ -121,9 +133,16 @@ while (1) {
     doOutput();
     $IF->{sys}{prompt}=$IF->{sys}{prompt_default};
 
-    $IF->{stdin}=<STDIN> if not length $IF->{stdin}; $DB::single=1 if $IF->{stdin} =~ /!DEBUG/i;
+}
+
+sub getInput(@) {
+#    $IF->{stdin}=<STDIN> if not length $IF->{stdin}; $DB::single=1 if $IF->{stdin} =~ /!DEBUG/i;
+    $IF->{stdin}=join('',@_) if @_;
     $IF->ParseInput;
-    next unless length $IF->{input}{sentance};
+}
+
+sub processInput() {
+    return unless length $IF->{input}{sentance};
     if ($IF->{input}{sentance} =~ /!\s*(\S*)(?:\s*(\S+?))?\s*$/) {
 	#Commands handeling. All of the form "!<command> [<parameter>]"
 	my $command=$1//'';
@@ -247,6 +266,15 @@ while (1) {
 }
 
 $DB::single=1;
+
+preInput();
+
+#while (1) {
+#    getInput();
+#    processInput();
+#    preInput();
+#}
+
 __DATA__
 {
     "__meta" : { "game_file" : "\u0000NONE" },
@@ -257,11 +285,11 @@ __DATA__
         "can" : {
             "introduction" : {
                 "set" : [ 
-		    [ { "stdout" : 1 } , "value", "Welcome to ae6.pl" ],
-		    [ { "stdout" : 1 } , "value", "\u0000 1" ],
-		    [ { "stdout" : 1 } , "value", "Please provide a game file" ],
-		    [ { "stdout" : 1 } , "value", "\u0000 0.5" ],
-		    [ { "stdout" : 1 } , "value", "Check 'ae6.pl -h' for basic help." ]
+		    [ "stdout" , "value", "Welcome to ae6.pl" ],
+		    [ "stdout" , "value", "\u0000 1" ],
+		    [ "stdout" , "value", "Please provide a game file" ],
+		    [ "stdout" , "value", "\u0000 0.5" ],
+		    [ "stdout" , "value", "Check 'ae6.pl -h' for basic help." ]
 		]
 	    }
         }
