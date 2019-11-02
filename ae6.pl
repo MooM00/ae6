@@ -257,11 +257,11 @@ __DATA__
         "can" : {
             "introduction" : {
                 "set" : [ 
-		    [ { "stdout" : 1 } , "value", "Welcome to ae6.pl" ],
-		    [ { "stdout" : 1 } , "value", "\u0000 1" ],
-		    [ { "stdout" : 1 } , "value", "Please provide a game file" ],
-		    [ { "stdout" : 1 } , "value", "\u0000 0.5" ],
-		    [ { "stdout" : 1 } , "value", "Check 'ae6.pl -h' for basic help." ]
+		    [ "stdout" , "value", "Welcome to ae6.pl" ],
+		    [ "stdout" , "value", "\u0000 1" ],
+		    [ "stdout" , "value", "Please provide a game file" ],
+		    [ "stdout" , "value", "\u0000 0.5" ],
+		    [ "stdout" , "value", "Check 'ae6.pl -h' for basic help." ]
 		]
 	    }
         }
