@@ -5,7 +5,7 @@ layout: default
 ## ae6 Text Adventure Engine.
 
 ###  TL;DR
-Text adventure. Think Zork. Need an engine? This’ll do. It reads JSON. It was made as a proof-of-concept for WebPerl
+Text adventure. Think Zork. Need an engine? Thisâ€™ll do. It reads JSON. It was made as a proof-of-concept for WebPerl
 
 ### Basics
 ae6 Consists of 3 basic parts.
@@ -85,8 +85,8 @@ The basic GaMEfile contains a single JSON object of the form:
 #### root of the file
 ```JSON
 {
-    "unique_name" : { base node },
-    "unique_name2" : { base node2 },
+    "unique_name" : { <base node> },
+    "unique_name2" : { <base node2> },
     etc...
 }
 ```
