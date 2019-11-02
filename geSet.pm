@@ -68,7 +68,7 @@ sub doSet {
 
     my $reply=undef;
     given ($self->{type}) {
-        when ("value") {$reply=join ("", map {$_->get//''} @{$self->{right}}); }
+        when ("value") {$reply=join ($gme->{sys}{flatten_array_separator}, map {$_->get//''} @{$self->{right}}); }
         when ("array") {$reply=[ map {$_->get} @{$self->{right}} ]; }
         when ("sum") {$reply=$self->{right}->get; }
     }
