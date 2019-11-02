@@ -47,6 +47,7 @@ sub new {
             honour_auto_exit          => 1,
             refresh_on_auto_exit      => 1,
 	    force_new_room	      => 0,
+	    flatten_array_separator   => '',
 
             #special words
             get_verb       => 'get',
@@ -68,7 +69,7 @@ sub new {
         },
 
         #data stores for game settings
-        public  => {},
+        global  => {},
         private => {},
 
         #I/O
