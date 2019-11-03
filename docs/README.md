@@ -28,7 +28,13 @@ WebPerl solves issue 1: 'Output' by letting you write directly to HTML elements,
 I built a proof-of-concept workig around 3: (Painting). Just have your code end, but your main loop is called by JavaScripts' `setInterval`. I'll post this somewhere and update a link here.
 
 That leaves issue 2: Input.
-With emscipten, you can't do `$inut=<STDIN>`. Emscripten's filesystem jsut returns `null` from the filehandle, instead of blocking.
+With emscipten, you can't do ```PERL $inut=<STDIN>```. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.
 Again, the solution is having your Perl code end, and have an event that triggers a `process_inpt`-type function.
 
 But of corse the program needs to be designed around this flow, and typically they arent.
+
+### Why Not hack some existing engine rather than build a new one?
+I looked at [rezrov](http://edmonson.paunix.org/rezrov/) and similar. I decided that making my own engine would be easier.
+Or at least more fun.
+
+## DETAILS.
