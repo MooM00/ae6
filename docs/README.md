@@ -1,4 +1,4 @@
-7
+8
 ### Starting up
 
 Simply:
@@ -89,18 +89,18 @@ It may also contain the following optional keys:
 `base_attr` : `[ 'attr1', 'attr2',....]`
 &nbsp;&nbsp;&nbsp;Extra attributes that items can have  
 &nbsp;&nbsp;&nbsp;Base attributes  
-* can only exist in base nodes.  
-* will be included in save files  
-* can be updated by the game  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; can only exist in base nodes.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; will be included in save files  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; can be updated by the game  
 &nbsp;&nbsp;&nbsp;The built-in base attributes are:  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`type`, `name`, `location`
 
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
 &nbsp;&nbsp;&nbsp;Extra attributes that items can have.  
 &nbsp;&nbsp;&nbsp;Find attributes  
-* can exist in any node
-* will not be included in savefiles
-* cannot be updaed by the game
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; can exist in any node  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; will not be included in savefiles  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&bull; cannot be updaed by the game  
 
 You can also update any 'system' attribute. The most common to change are:   
 `room` : `starting_room`  
@@ -112,12 +112,12 @@ You can also update any 'system' attribute. The most common to change are:
 
 #### magic base node : "__common_actions" (geCommon.pm)
 This contains a list of actions that will be used many times.
-```JSON
+```json
  "__common_actions" : {
      "look" : { "set" : [ [ "stdout" , "array", [ { "node" : [ "__self", "descr" ] } ] ] ] } 
 }
 ```
-They are not applied automatically, but rather an individual action (see below) can be set to a value of "1".  
+They are not applied automatically, but rather an individual action (see below) can be set to a value of "1".    
 At load time, that "1" will be replaced with a _clone_ of the common action provided here.  
 See the sction on geCan.pm for full details.  
 
@@ -126,8 +126,9 @@ These are replies to be used when a sentance is only partially understood.
 If only a verb is found (e.g. `poke`), the common reply for `verb:poke` (or `both:poke`) will be executed.  
 If only an object is detected (e.g. `cheese`), the common reply for `object:cheese` (or `both:cheese`) will be executed.  
 This is not fully implemented for some reason.  
-```JSON
+```json
 "__common_replies" : {
 	"verb" : { "look" : { "set" : [ [ "stdout", [ "unknown ", { "input" : "part"} ] ] ] } }
 }
 ```
+this ```perl $this="this:``` and `$that="that"`{:perl}
