@@ -1,4 +1,4 @@
-2
+3
 ### Starting up
 
 Simply:
@@ -90,11 +90,9 @@ It may also contain the following optional keys:
 
 |   |Extra attributes that items can have|
 ||  			Base attributes|
-||* can only exist in base nodes.|
-||* will be included in save files|
-||* can be updated by the game|
+||<ul<li>can only exist in base nodes.</li><li>will be included in save files</li><li>can be updated by the game</li></ul>|
 ||The built-in base attributes are:|
-||    `type`, `name`, `location`|
+||&nbsp;&nbsp;&nbsp;`type`, `name`, `location`|
 
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
 
