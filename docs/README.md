@@ -177,5 +177,5 @@ However, there are 5 reserved words that can only appear in the second form, oth
 These names are:
 *if, *set, *can, *exit, *attr*
 
-Se geConst.pm below for information on constants.
+See geConst.pm below for information on constants.
 
