@@ -164,7 +164,7 @@ These names are:
 &bull;if, &bull;set, &bull;can, &bull;exit, &bull;attr
 
 ##### <find_attr>
-They may contain 
+They may contain  
 &nbsp;&nbsp;&nbsp;&bull;strings  
 &nbsp;&nbsp;&nbsp;&bull;arrays of strings  
 &nbsp;&nbsp;&nbsp;&bull;constants  
