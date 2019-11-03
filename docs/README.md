@@ -1,3 +1,4 @@
+1
 ### Starting up
 
 Simply:
@@ -85,7 +86,7 @@ It may also contain the following optional keys:
 
 |   |This is used to decide if a save game is valid for this story.
 It must be an exact match to the save file.
-It defaults to the same value as `game_file`
+It defaults to the same value as `game_file`|
 
 `base_attr` : `[ 'attr1', 'attr2',....]`
 
