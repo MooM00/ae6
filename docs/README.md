@@ -1,4 +1,4 @@
-1
+2
 ### Starting up
 
 Simply:
@@ -84,17 +84,15 @@ This must contain the key
 It may also contain the following optional keys:  
 `game_file_compatability` : `some meaningful compatability string`  
 
-|   |This is used to decide if a save game is valid for this story.
-It must be an exact match to the save file.
-It defaults to the same value as `game_file`|
+|   |This is used to decide if a save game is valid for this story.<br>It must be an exact match to the save file.<br>It defaults to the same value as `game_file`|
 
 `base_attr` : `[ 'attr1', 'attr2',....]`
 
 |   |Extra attributes that items can have|
 ||  			Base attributes|
-||* can only exist in base nodes.
-* will be included in save files  
-* can be updated by the game|
+||* can only exist in base nodes.|
+||* will be included in save files|
+||* can be updated by the game|
 ||The built-in base attributes are:|
 ||    `type`, `name`, `location`|
 
