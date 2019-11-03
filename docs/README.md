@@ -75,7 +75,7 @@ But nothing in ae6 will care if you are allowed to pick up a room or walk in to 
 
 #### magic base node : "__meta"
 This must contain the key  
-`game_file` : `short name of the story`  
+`game_file` : `short name of the story`
 
 |    |If this is missing, ae6 will die.  |
 
@@ -83,21 +83,23 @@ This must contain the key
 It may also contain the following optional keys:  
 `game_file_compatability` : `some meaningful compatability string`  
 
-|   |This is used to decide if a save game is valid for this story.   |
-|   |It must be an exact match to the save file.|
-|   |It defaults to the same value as `game_file`|
+|   |This is used to decide if a save game is valid for this story.
+It must be an exact match to the save file.
+It defaults to the same value as `game_file`
 
-`base_attr` : `[ 'attr1', 'attr2',....]`  
+`base_attr` : `[ 'attr1', 'attr2',....]`
 
 |   |Extra attributes that items can have|
-||  			Base attributes	* can only exist in base nodes.|
+||  			Base attributes|
+||* can only exist in base nodes.
+* will be included in save files  
+* can be updated by the game|
+||The built-in base attributes are:|
+||    `type`, `name`, `location`|
 
-  					* will be included in save files  
-  					* can be updated by the game  
-> > > The built-in base attributes are:  
-  				`type`, `name`, `location`  
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
->>>Extra attributes that items can have.  
+
+||Extra attributes that items can have.|
   			Find attributes	* can exist in any node  
   					* will not be included in savefiles  
   					* cannot be updaed by the game  
