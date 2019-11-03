@@ -1,4 +1,4 @@
-3
+4
 ### Starting up
 
 Simply:
@@ -90,7 +90,7 @@ It may also contain the following optional keys:
 
 |   |Extra attributes that items can have|
 ||  			Base attributes|
-||<ul<li>can only exist in base nodes.</li><li>will be included in save files</li><li>can be updated by the game</li></ul>|
+||<ul><li>can only exist in base nodes.</li><li>will be included in save files</li><li>can be updated by the game</li></ul>|
 ||The built-in base attributes are:|
 ||&nbsp;&nbsp;&nbsp;`type`, `name`, `location`|
 
