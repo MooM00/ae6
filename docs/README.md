@@ -28,7 +28,7 @@ WebPerl solves issue 1: 'Output' by letting you write directly to HTML elements,
 I built a proof-of-concept workig around 3: (Painting). Just have your code end, but your main loop is called by JavaScripts' `setInterval`. I'll post this somewhere and update a link here.
 
 That leaves issue 2: Input.  
-With emscipten, you can't do {% highlight perl %}$inut=<STDIN>{% endhighlight %}. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
+With emscipten, you can't do {% highlight perl %}`$input=<STDIN>`{% endhighlight %}. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
 Again, the solution is having your Perl code end, and have an event that triggers a `process_inpt`-type function.
 
 But of corse the program needs to be designed around this flow, and typically they arent.
@@ -76,22 +76,22 @@ But nothing in ae6 will care if you are allowed to pick up a room or walk in to 
 #### magic base node : "__meta"
 This must contain the key  
 `game_file` : `short name of the story`   
-  			If this is missing, ae6 will die.  
+ >> 			If this is missing, ae6 will die.  
 
 It may also contain the following optional keys:  
 `game_file_compatability` : `some meaningful compatability string`  
-  			This is used to decide if a save game is valid for this story.   
-  			It must be an exact match to the save file.   
-  			It defaults to the same value as `game_file`  
+> > 			This is used to decide if a save game is valid for this story.   
+> 			It must be an exact match to the save file.   
+>>> 			It defaults to the same value as `game_file`  
 `base_attr` : `[ 'attr1', 'attr2',....]`  
-  			Extra attributes that items can have  
-  			Base attributes	* can only exist in base nodes.   
+>  			Extra attributes that items can have  
+> >  			Base attributes	* can only exist in base nodes.   
   					* will be included in save files  
   					* can be updated by the game  
-  			The built-in base attributes are:  
+> > > The built-in base attributes are:  
   				`type`, `name`, `location`  
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
-  			Extra attributes that items can have.  
+>>>Extra attributes that items can have.  
   			Find attributes	* can exist in any node  
   					* will not be included in savefiles  
   					* cannot be updaed by the game  
