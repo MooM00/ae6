@@ -1,11 +1,5 @@
 ### Starting up
 
-|head|head|
-|---|---|
-|bdy|bdy|
-
-|gihi|bjhhgu|
-
 Simply:
 ```
 perl ae6.pl
@@ -34,7 +28,7 @@ WebPerl solves issue 1: 'Output' by letting you write directly to HTML elements,
 I built a proof-of-concept workig around 3: (Painting). Just have your code end, but your main loop is called by JavaScripts' `setInterval`. I'll post this somewhere and update a link here.
 
 That leaves issue 2: Input.  
-With emscipten, you can't do `{% highlight perl %}$input=<STDIN>{% endhighlight %}`. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
+With emscipten, you can't do `$input=<STDIN>`{:pl}. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
 Again, the solution is having your Perl code end, and have an event that triggers a `process_inpt`-type function.
 
 But of corse the program needs to be designed around this flow, and typically they arent.
@@ -81,9 +75,9 @@ But nothing in ae6 will care if you are allowed to pick up a room or walk in to 
 
 #### magic base node : "__meta"
 This must contain the key  
-+-+-+
-+`game_file` : `short name of the story`|If this is missing, ae6 will die.  |
-+-+-+
+`game_file` : `short name of the story`
+|   |If this is missing, ae6 will die.  |
+
 
 It may also contain the following optional keys:  
 `game_file_compatability` : `some meaningful compatability string`  
