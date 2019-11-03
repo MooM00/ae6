@@ -1,4 +1,4 @@
-9
+1
 ### Starting up
 
 Simply:
@@ -175,7 +175,7 @@ You may choose the first form to simplify your data (or just less typing).
 Or the second form to clarify your data. It doesn't really matter because the first form is internally changed to the second form at load time.  
 However, there are 5 reserved words that can only appear in the second form, otherwise they will clash with builtins.  
 These names are:  
-*if, *set, *can, *exit, *attr*
+&bull;if, &bull;set, &bull;can, &bull;exit, &bull;attr
 
 See geConst.pm below for information on constants.  
 
