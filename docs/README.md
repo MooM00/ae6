@@ -28,7 +28,7 @@ WebPerl solves issue 1: 'Output' by letting you write directly to HTML elements,
 I built a proof-of-concept workig around 3: (Painting). Just have your code end, but your main loop is called by JavaScripts' `setInterval`. I'll post this somewhere and update a link here.
 
 That leaves issue 2: Input.  
-With emscipten, you can't do `$inut=<STDIN>`{:.pl}. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
+With emscipten, you can't do `$inut=<STDIN>`{:.javascript}. Emscripten's filesystem just returns `null` from the filehandle, instead of blocking.  
 Again, the solution is having your Perl code end, and have an event that triggers a `process_inpt`-type function.
 
 But of corse the program needs to be designed around this flow, and typically they arent.
@@ -74,19 +74,19 @@ Here's a secret: nothing actually reads the `type` setting. Your story can, of c
 But nothing in ae6 will care if you are allowed to pick up a room or walk in to a box of matches.  
 
 #### magic base node : "__meta"
-This must contain the key
+This must contain the key  
 `game_file` : `short name of the story` 
-			If this is missing, ae6 will die.
-The may also contain the following keys:
-`game_file_compatability` : `some meaningful compatability string`
-			This is used to decide if a save game is valid for this story.  
-			It must be an exact match to the save file.  
+			If this is missing, ae6 will die.  
+The may also contain the following keys:  
+`game_file_compatability` : `some meaningful compatability string`  
+			This is used to decide if a save game is valid for this story.   
+			It must be an exact match to the save file.   
 			It defaults to the same value as `game_file`  
 `base_attr` : `[ 'attr1', 'attr2',....]`  
 			Extra attributes that items can have  
 			Base attributes	* can only exist in base nodes.   
-					* will be included in save files
-					* can be updated by the game
+					* will be included in save files  
+					* can be updated by the game  
 			The built-in base attributes are:  
 				`type`, `name`, `location`  
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
