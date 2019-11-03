@@ -60,11 +60,15 @@ This is the hard part. Mostly because typing JSON in vim is frustrating when you
 
 The basic GaMEfile contains a single JSON object of the form:
 #### root of the file
-```JSON
+```json
 {
     "unique_name" : { <base_node> },
-    "unique_name2" : {<base_node2> },
+    "unique_name2" : { <base_node2> },
     etc...
 }
 ```
 
+Each object in the root node is either a room or a thing (or one of the 3 magic nodes below).  
+There is no actual difrence between rooms and things. There is nothing stopping you having a `get` action on something with `type` of `room`.  
+Here's a secret: nothing actually reads the `type` setting. Your story can, of corse, since it's a 'base attribute'.  
+But nothing in ae6 will care if you are allowed to pick up a room or walk in to a box of matches.  
