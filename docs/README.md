@@ -1,4 +1,4 @@
-8
+9
 ### Starting up
 
 Simply:
@@ -131,4 +131,51 @@ This is not fully implemented for some reason.
 	"verb" : { "look" : { "set" : [ [ "stdout", [ "unknown ", { "input" : "part"} ] ] ] } }
 }
 ```
-this ```perl $this="this:``` and `$that="that"`{:perl}
+
+#### base nodes / other nodes (geNode.pm)
+Every base node must have a unique name, and may not be any of the 3 magic names above.
+
+It is of the form
+```
+ "unique_name" : {
+     [ <base_attr>[ ,<base_attr>....],]
+     [ <find_attr>[ ,<find_attr>....],]
+     [ <if> ,]
+     [ <set> ,]
+     [ <can> ,]
+     [ <exit> ,]
+ }
+```
+Note that the order is not relevant in any hash (`{..}`) in JSON. You don't even need to keep the atributes together.
+*
+`<base_attr>` May _only_ appear in base nodes. There is no other difference in a node's functionality[1].
+
+[1]Note that `__self` and `private` all refer to the base node that they descend from, not the node they are immediately attached to.
+
+##### <base_attr>
+They may only contain simple strings.
+
+Base Attributes can appear in any base node as `"base_node" : { "my_base" : "value" }`.  
+Or you can put them one level deeper as `"base_node" : { "attr" : { "my_base" : "value", "if" : "ever" } }`.  
+You may choose the first form to simplify your data (or just less typing).  
+Or the second form to clarify your data.  
+However, there are 5 reserved words that can only appear in the second form, otherwise they will clash with builtins.  
+These names are:  
+&bull;if, &bull;set, &bull;can, &bull;exit, &bull;attr
+
+##### <find_attr>
+They may contain 
+* strings
+* arrays of strings
+* constants
+
+Find Attributes can appear in _any_ node as `"node" : { "my_attr" : "value" }`.
+Or you can put them one level deeper as `"node" : { "attr" : { "my_node" : "value", "iff" : "ever" } }`.
+You may choose the first form to simplify your data (or just less typing).
+Or the second form to clarify your data. It doesn't really matter because the first form is internally changed to the second form at load time.
+However, there are 5 reserved words that can only appear in the second form, otherwise they will clash with builtins.
+These names are:
+*if, *set, *can, *exit, *attr*
+
+Se geConst.pm below for information on constants.
+
