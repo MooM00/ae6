@@ -1,4 +1,4 @@
-6
+7
 ### Starting up
 
 Simply:
@@ -89,21 +89,22 @@ It may also contain the following optional keys:
 `base_attr` : `[ 'attr1', 'attr2',....]`
 &nbsp;&nbsp;&nbsp;Extra attributes that items can have  
 &nbsp;&nbsp;&nbsp;Base attributes  
-&nbsp;&nbsp;&nbsp;* can only exist in base nodes.  
-&nbsp;&nbsp;&nbsp;* will be included in save files  
-&nbsp;&nbsp;&nbsp;* can be updated by the game  
+* can only exist in base nodes.  
+* will be included in save files  
+* can be updated by the game  
 &nbsp;&nbsp;&nbsp;The built-in base attributes are:  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`type`, `name`, `location`
 
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
 &nbsp;&nbsp;&nbsp;Extra attributes that items can have.  
 &nbsp;&nbsp;&nbsp;Find attributes  
-&nbsp;&nbsp;&nbsp;* can exist in any node
-&nbsp;&nbsp;&nbsp;* will not be included in savefiles
-&nbsp;&nbsp;&nbsp;* cannot be updaed by the game
+* can exist in any node
+* will not be included in savefiles
+* cannot be updaed by the game
 
 You can also update any 'system' attribute. The most common to change are:   
-`room` : `starting_room`  Default is 'introduction'  
+`room` : `starting_room`  
+&nbsp;&nbsp;&nbsp;Default is 'introduction'  
 `prompt_default` : `input prompt`  
 &nbsp;&nbsp;&nbsp;Default is `:> `  
 &nbsp;&nbsp;&nbsp;If the game changes `prompt`, it is automatically reset to   
