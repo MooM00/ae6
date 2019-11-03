@@ -90,22 +90,22 @@ It may also contain the following optional keys:
 
 |   |Extra attributes that items can have|
 ||  			Base attributes|
-||* can only exist in base nodes.<br/>\* will be included in save files<br/>\* can be updated by the game|
+||&nbsp;&nbsp;&nbsp;\* can only exist in base nodes.<br/>&nbsp;&nbsp;&nbsp;\* will be included in save files<br/>&nbsp;&nbsp;&nbsp;\* can be updated by the game|
 ||The built-in base attributes are:|
 ||&nbsp;&nbsp;&nbsp;`type`, `name`, `location`|
 
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
 
 ||Extra attributes that items can have.|
-  			Find attributes	* can exist in any node  
-  					* will not be included in savefiles  
-  					* cannot be updaed by the game  
+||Find attributes|
+||&nbsp;&nbsp;&nbsp;\* can exist in any node<br/>&nbsp;&nbsp;&nbsp;\* will not be included in savefiles<br/>&nbsp;&nbsp;&nbsp;\* cannot be updaed by the game|
+
 You can also update any 'system' attribute. The most common to change are:   
 `room` : `starting_room`  Default is 'introduction'  
 `prompt_default` : `input prompt`  
-  			Default is `:> `  
-  			If the game changes `prompt`, it is automatically reset to   
-  			`prompt_default` at the next action.  
+&nbsp;&nbsp;&nbsp;Default is `:> `  
+&nbsp;&nbsp;&nbsp;If the game changes `prompt`, it is automatically reset to   
+&nbsp;&nbsp;&nbsp;`prompt_default` at the next action.  
 
 #### magic base node : "__common_actions" (geCommon.pm)
 This contains a list of actions that will be used many times.
