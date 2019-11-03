@@ -1,4 +1,4 @@
-5
+6
 ### Starting up
 
 Simply:
@@ -76,29 +76,31 @@ But nothing in ae6 will care if you are allowed to pick up a room or walk in to 
 
 #### magic base node : "__meta"
 This must contain the key  
-`game_file` : `short name of the story`
-
-|    |If this is missing, ae6 will die.  |
+`game_file` : `short name of the story`  
+&nbsp;&nbsp;&nbsp;If this is missing, ae6 will die.
 
 
 It may also contain the following optional keys:  
 `game_file_compatability` : `some meaningful compatability string`  
-
-|   |This is used to decide if a save game is valid for this story.<br>It must be an exact match to the save file.<br>It defaults to the same value as `game_file`|
+&nbsp;&nbsp;&nbsp;This is used to decide if a save game is valid for this story.  
+&nbsp;&nbsp;&nbsp;It must be an exact match to the save file.  
+&nbsp;&nbsp;&nbsp;It defaults to the same value as `game_file`  
 
 `base_attr` : `[ 'attr1', 'attr2',....]`
-
-|   |Extra attributes that items can have|
-||  			Base attributes|
-||&nbsp;&nbsp;&nbsp;\* can only exist in base nodes.<br/>&nbsp;&nbsp;&nbsp;\* will be included in save files<br/>&nbsp;&nbsp;&nbsp;\* can be updated by the game|
-||The built-in base attributes are:|
-||&nbsp;&nbsp;&nbsp;`type`, `name`, `location`|
+&nbsp;&nbsp;&nbsp;Extra attributes that items can have  
+&nbsp;&nbsp;&nbsp;Base attributes  
+&nbsp;&nbsp;&nbsp;* can only exist in base nodes.  
+&nbsp;&nbsp;&nbsp;* will be included in save files  
+&nbsp;&nbsp;&nbsp;* can be updated by the game  
+&nbsp;&nbsp;&nbsp;The built-in base attributes are:  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`type`, `name`, `location`
 
 `find_attr` : `[ 'findattr1', 'findattr2',....]`  
-
-||Extra attributes that items can have.|
-||Find attributes|
-||&nbsp;&nbsp;&nbsp;\* can exist in any node<br/>&nbsp;&nbsp;&nbsp;\* will not be included in savefiles<br/>&nbsp;&nbsp;&nbsp;\* cannot be updaed by the game|
+&nbsp;&nbsp;&nbsp;Extra attributes that items can have.  
+&nbsp;&nbsp;&nbsp;Find attributes  
+&nbsp;&nbsp;&nbsp;* can exist in any node
+&nbsp;&nbsp;&nbsp;* will not be included in savefiles
+&nbsp;&nbsp;&nbsp;* cannot be updaed by the game
 
 You can also update any 'system' attribute. The most common to change are:   
 `room` : `starting_room`  Default is 'introduction'  
