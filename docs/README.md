@@ -165,17 +165,17 @@ These names are:
 
 ##### <find_attr>
 They may contain 
-* strings
-* arrays of strings
-* constants
+&nbsp;&nbsp;&nbsp;&bull;strings  
+&nbsp;&nbsp;&nbsp;&bull;arrays of strings  
+&nbsp;&nbsp;&nbsp;&bull;constants  
 
-Find Attributes can appear in _any_ node as `"node" : { "my_attr" : "value" }`.
-Or you can put them one level deeper as `"node" : { "attr" : { "my_node" : "value", "iff" : "ever" } }`.
-You may choose the first form to simplify your data (or just less typing).
-Or the second form to clarify your data. It doesn't really matter because the first form is internally changed to the second form at load time.
-However, there are 5 reserved words that can only appear in the second form, otherwise they will clash with builtins.
-These names are:
+Find Attributes can appear in _any_ node as `"node" : { "my_attr" : "value" }`.  
+Or you can put them one level deeper as `"node" : { "attr" : { "my_node" : "value", "iff" : "ever" } }`.  
+You may choose the first form to simplify your data (or just less typing).  
+Or the second form to clarify your data. It doesn't really matter because the first form is internally changed to the second form at load time.  
+However, there are 5 reserved words that can only appear in the second form, otherwise they will clash with builtins.  
+These names are:  
 *if, *set, *can, *exit, *attr*
 
-See geConst.pm below for information on constants.
+See geConst.pm below for information on constants.  
 
