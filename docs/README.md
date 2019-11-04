@@ -1,4 +1,4 @@
-4
+5
 ### Starting up
 
 Simply:
@@ -266,7 +266,7 @@ When the constant is just a value, as in the first case, there is no magic at al
 Being Perl, that string could be a number just by using a neumeric operator.
 
 
-Where `<keyword>` is one of 
+Where `<keyword>` is one of  
 &nbsp;&nbsp;&nbsp;&bull; `node`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<value>` is an array of the form `[ <name>, <attr> ]`.  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<name>` here is the name of  a base node (or the special '__self'- see note below)  
@@ -285,4 +285,53 @@ Where `<keyword>` is one of
 &nbsp;&nbsp;&nbsp;&bull; `input`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This gives access to the various parts of the sentance as determined by the input parser. More below  
 	
+
+#### Setting values (geSet.pm)
+This is used to assign values to things.  
+The values can be constants (geConst.pm above) or sums (see geSum.pl below)  
+The things can be private variables, global variables, system settings or certain system obejcts  
+```
+ "set" : <set>
+```
+or 
+```
+ "set" : [ <set1>, <set2>...]
+```
+
+Each `<set>` is of the form:
+```
+	[ <key>, (<type>,) <value> ]
+```
+
+Where:  
+`<key>` is one of  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"stop"`	Stop processing `set`. Go back to waiting on user input. (Used to break race conditions.)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"stdin"`	Forge input. The `<value>` is pushed in to gme.pm's stdin buffer.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"stdout"`	Append (not replace) the output stream. `<value>` can be a string or an array.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"private":<variable>}`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the value of a variable private to this object.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"global":<variable>}`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the value of a variable that is visible to all objects.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"node": [<name>, <base_attr>]}`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the base attribute `<base attr>` on the base node called `<nam>`.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `<name>` is `"__self"`, it is translated _at load time_ to the base node above this set.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"sys":<setting>}`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This provides acccess to the engines internal settings.   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typically this would be to teleport (walk) by setting 'room', temporarily changeing 'prompt' or  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabling the 'honour_auto_exit' (below). Check the heasd of gme.pm for all `sys` settings.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"input":<parts>}`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Provide access to the various parts of the input produced by the input parser.  
+
+`<type>` defaults to `"value"` and is one of  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"array"`	The right hand side is treated as an array.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"value"`	~The right had side is treated as a single value. Arrays are flattened with `join("",@)`. I should probably   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add some sort of $RS. Maybe `$self->{sys}{flatten_array_separator}`. Yeah, I'll do that now... Done.~  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The right had side is treated as a single value. Arrays are flattened using the `flatten_array_separator`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system value to join the strings.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"sum"`	The right hand side must be a sum (geSum.pm)  
+
+`<value>` is one of:  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; constant (geConst.pm)		  if `<type>` is `"array"` or `"value"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; array of constant (geConst.pm)  if `<type>` is `"array"` or `"value"`  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; sum (geSum.pm)		  if `<type>` if `"sum"`  
 
