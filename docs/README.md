@@ -1,4 +1,4 @@
-2
+3
 ### Starting up
 
 Simply:
@@ -200,6 +200,53 @@ Of the form
 ```
 When ae6 is walking the tree looking for a find-attribute or honoring a do-set (see below), the &lt;if test&gt; will be performed every time and the approprate block followed.
 
-The `&lt;if test&gt;` is described in detail below in geTest.pm
-The `&lt;then block&gt;` and `&lt;else block&gt;` (if provided) are regular nodes.
+The `<if test>` is described in detail below in geTest.pm
+The `<then block>` and `<else block>` (if provided) are regular nodes.
+
+#### Tests (geTest.pm)
+A test can be of the form:
+```
+{ "and" : { <test1>, <test2>, ... } 
+```
+or 
+``` { "or" : { <test1>, <test2>, ... } 
+``` 
+or 
+``` { "not" : <test> } ``` 
+or just 
+```
+<test> 
+````
+Where `<test>` is:
+```
+ [ <constant>, <oper>, <constant> ]
+```
+or
+```
+ [ <constant>, <"defined"|"undef"> ]
+```
+
+In the `"and"` form, every test is performed in the order they appear untill one fails. After a failure, no further tests are performed.  
+If the final  test passes, the test is 'true'. If any fail, the test is 'false'  
+
+In the `"or"` form, every test is performed in the order they appear untill one suceeds. After a success, no further tests are performed.  
+If the final  test fails, the test is 'false'. If any succeed, the test is 'true'  
+
+In the `"not"` form, the single test is run. If that test succeeds, then 'false' is returned. If it fails, 'true' is returned.  
+
+In a test, `<constant>` is a geConst.pm described below.  
+`<oper>` must be one of:  
+* comparing as numbers
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`==`, `!=`, `>=`, `>`, `<=`, `<`
+* comparing as text
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`eq`, `ne`, `ge`, `gt`, `le`, `lt`
+* Perl regular expressions
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`=~`, `!~`
+
+When comparing as numbers, undefined values are assumed to be 0, so that you don't need to pre-initialize a counter if you don't mind starting at 0.  
+When comparing as text, undefined values are assumed to be '' (Empty string) so that you don't need to pre-initialize _anything_  
+
+Since tests can contain tests (e.g. `"and"`), it is possible to build any logic. There is no limit on depth (untill you run out of RAM. This _is_ Perl).  
+
+
 
