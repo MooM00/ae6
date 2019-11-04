@@ -1,4 +1,4 @@
-6
+7
 ### Starting up
 
 Simply:
@@ -324,8 +324,8 @@ Where:
 
 `<type>` defaults to `"value"` and is one of  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"array"`	The right hand side is treated as an array.  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"value"`	~~The right had side is treated as a single value. Arrays are flattened with `join("",@)`. I should probably   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add some sort of $RS.   
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"value"`	~~The right had side is treated as a single value. Arrays are flattened  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;with `join("",@)`. I should probably add some sort of $RS.   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maybe `$self->{sys}{flatten_array_separator}`. Yeah, I'll do that now... Done.~~    
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The right had side is treated as a single value.  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arrays are flattened using the `flatten_array_separator`  
@@ -349,24 +349,24 @@ or
 
 `<raw value>` is just a string.  
 `<computed value>` is either  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<value>`   		as contant (geConst.pm)  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"!", <value>`	computes the logical-not of `<value>` (as Perl understands ```PERL $x != $x```)  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"ltrim", <value>`	
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"rtrim", <value>`	
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<value>`   		as constant (geConst.pm)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"!", <value>`	computes the logical-not of `<value>` (as Perl understands `$x != $x`)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"ltrim", <value>`  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"rtrim", <value>`  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"trim", <value>`	returns `<value>` with whitespace stripped from the left/right/both ends  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"sub", [ <num>, <num> ], <value>`  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"sub", [ <num1>, <num2> ], <value>`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returns the substirng of `<value>` starting at byte `<num1>`, ending at byte `<num2>`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that `<num1>` and `<num2>` are (geConst.pm), so can be computed values.  
 `<oper>` is one of:  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"+"`		adition  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"-"`		subtraction  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"&mult;"`		multiplication  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"\*"`		multiplication  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"/"`		division  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"%"`		modulo  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"^"`		exponent (in perl, its `&mult;&mult;`)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"^"`		exponent (in perl, its `**`)  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"."`		string concatenation. So you can do ("1",".","0","/","5") and get "2"  
 
-I just realized that this method means that you can't have any of the `<computed value>` special words (!,trim,etc) as actual values.  
+I just realized that this layout means that you can't have any of the `<computed value>` special words (!,trim,etc) as actual values.  
 Good thing this is math and none of those are numbers.  
 
 
