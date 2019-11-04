@@ -1,4 +1,4 @@
-5
+6
 ### Starting up
 
 Simply:
@@ -313,20 +313,22 @@ Where:
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"global":<variable>}`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the value of a variable that is visible to all objects.  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"node": [<name>, <base_attr>]}`  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the base attribute `<base attr>` on the base node called `<nam>`.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Set the base attribute `<base attr>` on the base node called `<name>`.  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;If `<name>` is `"__self"`, it is translated _at load time_ to the base node above this set.  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"sys":<setting>}`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This provides acccess to the engines internal settings.   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typically this would be to teleport (walk) by setting 'room', temporarily changeing 'prompt' or  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabling the 'honour_auto_exit' (below). Check the heasd of gme.pm for all `sys` settings.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;disabling the 'honour_auto_exit' (below). Check the head of gme.pm for all `sys` settings.  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `{"input":<parts>}`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Provide access to the various parts of the input produced by the input parser.  
 
 `<type>` defaults to `"value"` and is one of  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"array"`	The right hand side is treated as an array.  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"value"`	~The right had side is treated as a single value. Arrays are flattened with `join("",@)`. I should probably   
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add some sort of $RS. Maybe `$self->{sys}{flatten_array_separator}`. Yeah, I'll do that now... Done.~  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The right had side is treated as a single value. Arrays are flattened using the `flatten_array_separator`  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"value"`	~~The right had side is treated as a single value. Arrays are flattened with `join("",@)`. I should probably   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;add some sort of $RS.   
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Maybe `$self->{sys}{flatten_array_separator}`. Yeah, I'll do that now... Done.~~    
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The right had side is treated as a single value.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Arrays are flattened using the `flatten_array_separator`  
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;system value to join the strings.  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `"sum"`	The right hand side must be a sum (geSum.pm)  
 
@@ -334,4 +336,38 @@ Where:
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; constant (geConst.pm)		  if `<type>` is `"array"` or `"value"`  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; array of constant (geConst.pm)  if `<type>` is `"array"` or `"value"`  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; sum (geSum.pm)		  if `<type>` if `"sum"`  
+
+#### Sums (geSum.pm)
+For doing both string and neumerical sums as part of geSet.pm (above). 
+```
+ "sum", <raw value>
+```
+or
+```
+ "sum", [ <computed value>,<oper>,<computed value>(,<oper>,<comuted value>(,...)) ]
+```
+
+`<raw value>` is just a string.  
+`<computed value>` is either  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<value>`   		as contant (geConst.pm)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"!", <value>`	computes the logical-not of `<value>` (as Perl understands ```PERL $x != $x```)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"ltrim", <value>`	
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"rtrim", <value>`	
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"trim", <value>`	returns `<value>` with whitespace stripped from the left/right/both ends  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"sub", [ <num>, <num> ], <value>`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;returns the substirng of `<value>` starting at byte `<num1>`, ending at byte `<num2>`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note that `<num1>` and `<num2>` are (geConst.pm), so can be computed values.  
+`<oper>` is one of:  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"+"`		adition  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"-"`		subtraction  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"&mult;"`		multiplication  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"/"`		division  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"%"`		modulo  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"^"`		exponent (in perl, its `&mult;&mult;`)  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `"."`		string concatenation. So you can do ("1",".","0","/","5") and get "2"  
+
+I just realized that this method means that you can't have any of the `<computed value>` special words (!,trim,etc) as actual values.  
+Good thing this is math and none of those are numbers.  
+
+
 
