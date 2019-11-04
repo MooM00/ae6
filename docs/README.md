@@ -1,4 +1,4 @@
-8
+9
 ### Starting up
 
 Simply:
@@ -391,25 +391,25 @@ only entering the name (or alias) of an exit. This is magic in line with most te
 
 ### The sys->{input}{_&lt;thing&gt;_} that are important
 
-Of importance to note about how `ParseInput` sees the world.
-It gets a list of evry viable word. For every item in inventory or the room, the room itself and every exit it gathers their name, alias(es) and actions.  
-It then scans the sentance for anything that matches one of those words, or the beginning of one. if there are multiple matches, it'll say what conflicted.
-In the event that one word is the beginning of another, it'll 'do the right thing'  
-e.g.
-If there are words 'ball', 'balloon' and 'one big ball' and 'onerous task'
+Of importance to note about how `ParseInput` sees the world.  
+It gets a list of every viable word. For every item in inventory or the room, the room itself and every exit; it gathers their name, alias(es) and actions.  
+It then scans the sentance for anything that matches one of those words, or the beginning of one. If there are multiple matches, it'll say what conflicted.
+In the event that one word is the beginning of another, it'll 'do the right thing'   
+e.g.  
+If there are words 'ball', 'balloon', 'one big ball' and 'onerous task'  
 Then  
-'oner' matches 'onerous task'
+'oner' matches 'onerous task'  
 'b' will list 'ball' and 'balloon' as possible matches.  
-'ball' will match 'ball' and not complain about 'balloon'
-'one b' will match 'one big ball' and wont' think its 'one' and 'b'
+'ball' will match 'ball' and not complain about 'balloon'  
+'one b' will match 'one big ball' and wont' think its 'one' and 'b'  
 
 _Anything typed that does not match a word in the list is silently ignored_  
-'_get all_ things', '_get all_' and 'frobnicate _get_ things to the max that _all_ you people want' will behave the same 
+'_get all_ things', '_get all_' and 'frobnicate _get_ things to the max that _all_ you people want' will behave the same  
 (unless the GaMEfile check sys->{input}{sentance})
 
-There are several `_<things>_` produced by `ParseInput` that you may want to consider.
+There are several `_<things>_` produced by `ParseInput` that you may want to consider.  
 Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginning of the string up to the first ';'. It will strip that and leave the rest in sys->{stdin}.  
-If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.
+If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.  
 
 `sys->{input}{sentance}`  The sentance parsed (i.e. the bit before the first ';', or all of sys->{stdin} if there are no ';')  
 `sys->{input}{verb}`	The name of the action, even if an alias was entered.
