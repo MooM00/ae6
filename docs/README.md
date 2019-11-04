@@ -1,4 +1,4 @@
-3
+4
 ### Starting up
 
 Simply:
@@ -148,9 +148,8 @@ It is of the form
 ```
 Note that the order is not relevant in any hash (`{..}`) in JSON. You don't even need to keep the atributes together.
 *
-`<base_attr>` May _only_ appear in base nodes. There is no other difference in a node's functionality[^1].
-
-[^1]: Note that `__self` and `private` all refer to the base node that they descend from, not the node they are immediately attached to.
+`<base_attr>` May _only_ appear in base nodes. There is no other difference in a node's functionality.
+&nbsp;&nbsp;&nbsp;Note that `__self` and `private` all refer to the base node that they descend from, not the node they are immediately attached to.
 
 ##### <base_attr>
 They may only contain simple strings.
@@ -240,11 +239,11 @@ In the `"not"` form, the single test is run. If that test succeeds, then 'false'
 
 In a test, `<constant>` is a geConst.pm described below.  
 `<oper>` must be one of:  
-* comparing as numbers
+&nbsp;&nbsp;&nbsp;&bull; comparing as numbers
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`==`, `!=`, `>=`, `>`, `<=`, `<`
-* comparing as text
+&nbsp;&nbsp;&nbsp;&bull; comparing as text
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`eq`, `ne`, `ge`, `gt`, `le`, `lt`
-* Perl regular expressions
+&nbsp;&nbsp;&nbsp;&bull; Perl regular expressions
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`=~`, `!~`
 
 When comparing as numbers, undefined values are assumed to be 0, so that you don't need to pre-initialize a counter if you don't mind starting at 0.  
@@ -253,4 +252,37 @@ When comparing as text, undefined values are assumed to be '' (Empty string) so 
 Since tests can contain tests (e.g. `"and"`), it is possible to build any logic. There is no limit on depth (untill you run out of RAM. This _is_ Perl).  
 
 
+#### Constants (geConst.pm)
+This can have 2 primary forms:
+```json
+ "value"
+```
+or
+```
+ { <keyword> : <value> }
+```
+
+When the constant is just a value, as in the first case, there is no magic at all. It is just a raw string.   
+Being Perl, that string could be a number just by using a neumeric operator.
+
+
+Where `<keyword>` is one of 
+&nbsp;&nbsp;&nbsp;&bull; `node`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<value>` is an array of the form `[ <name>, <attr> ]`.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<name>` here is the name of  a base node (or the special '__self'- see note below)  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<attr>` here is an attribute (find or base) to refrence from the node `<name>`  
+&nbsp;&nbsp;&nbsp;&bull; `private`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<value>` is any variable name and is visible only to the current base node and decendants.  
+&nbsp;&nbsp;&nbsp;&bull; `global`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<value>` is any variable name and is visible evrywhere.  
+&nbsp;&nbsp;&nbsp;&bull; `sys`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This provides acccess to the engines internal settings. The `<value>` is the setting name  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Typically this would be to locate the player by reading the 'room' or checking for longer input in the `input`.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check the head of gme.pm for all `sys` settings.  
+&nbsp;&nbsp;&nbsp;&bull; `stdin`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;the `<value>` is ignored. This refrences the input stream. Use to forge user input, or read text following a `;`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You dont' need to use this. See geSet.pm below  
+&nbsp;&nbsp;&nbsp;&bull; `input`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This gives access to the various parts of the sentance as determined by the input parser. More below  
+	
 
