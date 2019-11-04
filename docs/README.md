@@ -1,4 +1,4 @@
-9
+1
 ### Starting up
 
 Simply:
@@ -404,10 +404,10 @@ Then
 'one b' will match 'one big ball' and wont' think its 'one' and 'b'  
 
 _Anything typed that does not match a word in the list is silently ignored_  
-'_get all_ things', '_get all_' and 'frobnicate _get_ things to the max that _all_ you people want' will behave the same  
-(unless the GaMEfile check sys->{input}{sentance})
+'*get all* things', '*get all*' and 'frobnicate and *get* things to the max that *all* you people want' will behave the same  
+(unless the GaMEfile checks sys->{input}{sentance} or one of those other words are known.)
 
-There are several `_<things>_` produced by `ParseInput` that you may want to consider.  
+There are several _`<things>`_ produced by `ParseInput` that you may want to consider.  
 Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginning of the string up to the first ';'. It will strip that and leave the rest in sys->{stdin}.  
 If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.  
 
