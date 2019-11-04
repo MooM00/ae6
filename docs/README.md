@@ -389,7 +389,7 @@ Here, `<exit_name>` is any string that you want to refrence an exit. Typically "
 Note that if you have `sys->direction_only_verb` set to any valid verb (for the current room), the player can travel by  
 only entering the name (or alias) of an exit. This is magic in line with most text advenrtures (or every one I've seen)  
 
-### The sys->{input}{_<thing>_} that are important
+### The sys->{input}{_&lt;thing&gt;_} that are important
 
 Of importance to note about how `ParseInput` sees the world.
 It gets a list of evry viable word. For every item in inventory or the room, the room itself and every exit it gathers their name, alias(es) and actions.  
