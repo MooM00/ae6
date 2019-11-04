@@ -1,4 +1,3 @@
-1
 ### Starting up
 
 Simply:
@@ -412,19 +411,19 @@ Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginni
 If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.  
 
 `sys->{input}{sentance}`  The sentance parsed (i.e. the bit before the first ';', or all of sys->{stdin} if there are no ';')  
-`sys->{input}{verb}`	The name of the action, even if an alias was entered.
-`sys->{input}{verb_raw}`  What was actually typed (in case you care wether the user uses abbreviations)
-`sys->{input}{verb_word}`  The word that was matched. i.e. this may be an alias.
-`sys->{input}{verb_name}`  Same as sys->{input}{verb}
-`sys->{input}{implied_object}`  the object that the verb was attached to (or the first one  
+`sys->{input}{verb}`	The name of the action, even if an alias was entered.  
+`sys->{input}{verb_raw}`  What was actually typed (in case you care wether the user uses abbreviations)  
+`sys->{input}{verb_word}`  The word that was matched. i.e. this may be an alias.  
+`sys->{input}{verb_name}`  Same as sys->{input}{verb}  
+`sys->{input}{implied_object}`  the object that the verb was attached to (or the first one   
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;we saw), in case there is no object in the sentance  
-`sys->{input}{implied_object_node}`  A pointer to the implied object, since we won't have any other handle to it.
+`sys->{input}{implied_object_node}`  A pointer to the implied object, since we won't have any other handle to it.  
 
-As to the object(s) returned, `ParseInput` will allow up to sys->{max_obj_in_input} Objects. They will be numbered in the order in which they appear in the sentance.
-The list below would equally apply to `<object2>` and `<object3>`, etc.
+As to the object(s) returned, `ParseInput` will allow up to sys->{max_obj_in_input} Objects. They will be numbered in the order in which they appear in the sentance.  
+The list below would equally apply to `<object2>` and `<object3>`, etc.  
 
-`sys->{input}{object1}`       A pointer to the object1 object.
-`sys->{input}{object1_raw}`   What was actually typed (in case you care wether the user uses abbreviations)  
+`sys->{input}{object1}`       A pointer to the object1 object.  
+`sys->{input}{object1_raw}`   What was actually typed (in case you care wether the user uses abbreviations)    
 `sys->{input}{object1_word}`  The word that was matched. i.e. this may be an alias.  
 `sys->{input}{object1_name}`  The name of the action, even if an alias was entered  
 
