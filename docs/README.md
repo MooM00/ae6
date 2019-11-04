@@ -1,4 +1,4 @@
-1
+2
 ### Starting up
 
 Simply:
@@ -148,9 +148,9 @@ It is of the form
 ```
 Note that the order is not relevant in any hash (`{..}`) in JSON. You don't even need to keep the atributes together.
 *
-`<base_attr>` May _only_ appear in base nodes. There is no other difference in a node's functionality[1].
+`<base_attr>` May _only_ appear in base nodes. There is no other difference in a node's functionality[^1].
 
-[1]Note that `__self` and `private` all refer to the base node that they descend from, not the node they are immediately attached to.
+[^1]: Note that `__self` and `private` all refer to the base node that they descend from, not the node they are immediately attached to.
 
 ##### <base_attr>
 They may only contain simple strings.
@@ -178,4 +178,28 @@ These names are:
 &bull;if, &bull;set, &bull;can, &bull;exit, &bull;attr
 
 See geConst.pm below for information on constants.  
+
+#### If (geIf.pm)
+If objects are either
+```
+ "if" : <if-then-else block>
+```
+or
+```
+ "if" : [
+ 	<if-then-else block>,
+ 	<if-then-else block>,
+	etc...
+ ]
+```
+
+###### if-then-else block
+Of the form
+```
+	<if test>, <then block> (, <else block>)
+```
+When ae6 is walking the tree looking for a find-attribute or honoring a do-set (see below), the &lt;if test&gt; will be performed every time and the approprate block followed.
+
+The `&lt;if test&gt;` is described in detail below in geTest.pm
+The `&lt;then block&gt;` and `&lt;else block&gt;` (if provided) are regular nodes.
 
