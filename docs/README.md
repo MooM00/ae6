@@ -370,4 +370,22 @@ I just realized that this layout means that you can't have any of the `<computed
 Good thing this is math and none of those are numbers.  
 
 
+#### Exits (geExit.pm)
+Of the form
+```
+ "exit" : { <exit_name> : <exit_room>(, <exit_name2> : <exit_room2>(,...)) }
+```
+
+Here, `<exit_name>` is any string that you want to refrence an exit. Typically "North", "Down", "Door", "Flee".  
+
+`<exit_room>` is one of two things:  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<exit_room>` - the name of a room to go to if the user 'goes to' this exit. This must exactly match a base node's name.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `{ "alias" : [ <alias1>(, <alias2>(,...)) ], "target" : <exit_room> }`  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here, you can provide aliased (`<alias1>`, etc) for an exit.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This way, you can honour "South", "Swim", "river", "water", but still only have "south" as a 'visible' exit.  
+
+Note that if you have `sys->direction_only_verb` set to any valid verb (for the current room), the player can travel by  
+only entering the name (or alias) of an exit. This is magic in line with most text advenrtures (or every one I've seen)  
+
+
 
