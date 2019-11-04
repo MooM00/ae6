@@ -1,4 +1,4 @@
-7
+8
 ### Starting up
 
 Simply:
@@ -379,13 +379,54 @@ Of the form
 Here, `<exit_name>` is any string that you want to refrence an exit. Typically "North", "Down", "Door", "Flee".  
 
 `<exit_room>` is one of two things:  
-&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<exit_room>` - the name of a room to go to if the user 'goes to' this exit. This must exactly match a base node's name.  
+&nbsp;&nbsp;&nbsp;&nbsp;&bull; `<exit_room>` - the name of a room to go to if the user 'goes to' this exit.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This must exactly match a base node's name.  
 &nbsp;&nbsp;&nbsp;&nbsp;&bull; `{ "alias" : [ <alias1>(, <alias2>(,...)) ], "target" : <exit_room> }`  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here, you can provide aliased (`<alias1>`, etc) for an exit.  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This way, you can honour "South", "Swim", "river", "water", but still only have "south" as a 'visible' exit.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Here, you can provide aliases (`<alias1>`, etc) for an exit.  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This way, you can honour "South", "Swim", "river", "water", but still  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;only have "south" as a 'visible' exit.  
 
 Note that if you have `sys->direction_only_verb` set to any valid verb (for the current room), the player can travel by  
 only entering the name (or alias) of an exit. This is magic in line with most text advenrtures (or every one I've seen)  
 
+### The sys->{input}{_<thing>_} that are important
+
+Of importance to note about how `ParseInput` sees the world.
+It gets a list of evry viable word. For every item in inventory or the room, the room itself and every exit it gathers their name, alias(es) and actions.  
+It then scans the sentance for anything that matches one of those words, or the beginning of one. if there are multiple matches, it'll say what conflicted.
+In the event that one word is the beginning of another, it'll 'do the right thing'  
+e.g.
+If there are words 'ball', 'balloon' and 'one big ball' and 'onerous task'
+Then  
+'oner' matches 'onerous task'
+'b' will list 'ball' and 'balloon' as possible matches.  
+'ball' will match 'ball' and not complain about 'balloon'
+'one b' will match 'one big ball' and wont' think its 'one' and 'b'
+
+_Anything typed that does not match a word in the list is silently ignored_  
+'_get all_ things', '_get all_' and 'frobnicate _get_ things to the max that _all_ you people want' will behave the same 
+(unless the GaMEfile check sys->{input}{sentance})
+
+There are several `_<things>_` produced by `ParseInput` that you may want to consider.
+Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginning of the string up to the first ';'. It will strip that and leave the rest in sys->{stdin}.  
+If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.
+
+`sys->{input}{sentance}`  The sentance parsed (i.e. the bit before the first ';', or all of sys->{stdin} if there are no ';')  
+`sys->{input}{verb}`	The name of the action, even if an alias was entered.
+`sys->{input}{verb_raw}`  What was actually typed (in case you care wether the user uses abbreviations)
+`sys->{input}{verb_word}`  The word that was matched. i.e. this may be an alias.
+`sys->{input}{verb_name}`  Same as sys->{input}{verb}
+`sys->{input}{implied_object}`  the object that the verb was attached to (or the first one  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;we saw), in case there is no object in the sentance  
+`sys->{input}{implied_object_node}`  A pointer to the implied object, since we won't have any other handle to it.
+
+As to the object(s) returned, `ParseInput` will allow up to sys->{max_obj_in_input} Objects. They will be numbered in the order in which they appear in the sentance.
+The list below would equally apply to `<object2>` and `<object3>`, etc.
+
+`sys->{input}{object1}`       A pointer to the object1 object.
+`sys->{input}{object1_raw}`   What was actually typed (in case you care wether the user uses abbreviations)  
+`sys->{input}{object1_word}`  The word that was matched. i.e. this may be an alias.  
+`sys->{input}{object1_name}`  The name of the action, even if an alias was entered  
 
 
+Read the provided GaMEfile to see it all in action.
