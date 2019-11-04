@@ -209,14 +209,18 @@ A test can be of the form:
 { "and" : { <test1>, <test2>, ... } 
 ```
 or 
-``` { "or" : { <test1>, <test2>, ... } 
+``` 
+{ "or" : { <test1>, <test2>, ... } 
 ``` 
 or 
-``` { "not" : <test> } ``` 
+``` 
+{ "not" : <test> } 
+``` 
 or just 
 ```
 <test> 
 ````
+
 Where `<test>` is:
 ```
  [ <constant>, <oper>, <constant> ]
