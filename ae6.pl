@@ -136,7 +136,6 @@ sub preInput() {
 }
 
 sub getInput(@) {
-#    $IF->{stdin}=<STDIN> if not length $IF->{stdin}; $DB::single=1 if $IF->{stdin} =~ /!DEBUG/i;
     $IF->{stdin}=join('',@_) if @_;
     $IF->ParseInput;
 }
@@ -268,12 +267,6 @@ sub processInput() {
 $DB::single=1;
 
 preInput();
-
-#while (1) {
-#    getInput();
-#    processInput();
-#    preInput();
-#}
 
 __DATA__
 {
