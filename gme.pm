@@ -59,7 +59,8 @@ sub new {
             max_obj_in_input     => 1,
 	    no_input_alert	 => 0,
 	    prompt		 => ':> ',
-	    prompt_default	 => ':> '
+	    prompt_default	 => ':> ',
+	    sentance_separator   => ';'
         },
 
         #data stores for game settings
@@ -263,7 +264,11 @@ sub ParseInput {
     };
 
     $self->{input} = {};
-    ( $sentance, $self->{stdin} ) = $self->{stdin} =~ /^\s*([^;]*?)\s*(?:;\s*(.*?)\Z|\Z)/;    #treat ';' as a sentance separator. sorry, no "one;word" yet
+    if ($self->{sys}{sentance_separator} ne '') {
+	( $sentance, $self->{stdin} )=split(/\Q$self->{sys}{sentance_separator}\E/, $self->{stdin}, 2);
+	$self->{stdin}//='';
+	$sentance=~s/^\s*(.*?)\s*$/$1/;
+    }
     $self->{input}{sentance} = $sentance;
     $self->{stdin} //= '';
     print "Parsing [$sentance]\n" if $main::DEBUG;
