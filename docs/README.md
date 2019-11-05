@@ -14,7 +14,7 @@ To start a story and automatically run several commands:
 ```
 perl ae6.pl -f TestStoryOne.json look;get all;go north;n;n;duck;enchant lantern
 ```
-Note that you can use ';' in the game to provide multiple commands at once.
+Note that you can use ';' in the game (or you can change it to another character) to provide multiple commands at once.
 
 ### Did someone say [WebPerl](https://webperl.zero-g.net/)
 Yes. Yes I did.
@@ -407,7 +407,10 @@ _Anything typed that does not match a word in the list is silently ignored_
 (unless the GaMEfile checks sys->{input}{sentance} or one of those other words are known.)
 
 There are several _`<things>`_ produced by `ParseInput` that you may want to consider.  
-Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginning of the string up to the first ';'. It will strip that and leave the rest in sys->{stdin}.  
+Firstly, `ParseInput` will check sys->{stdin} and pull the text from the beginning of the   
+string up to the first `sys->{sentance_separator}`, which defaults to ';'.  
+It will strip that and leave the rest in sys->{stdin}.  
+
 If the user enters 'up;left;up', then `ParseInput` would process 'up', leaving 'left;up' in sys->{stdin} for the next cycle.  
 
 `sys->{input}{sentance}`  The sentance parsed (i.e. the bit before the first ';', or all of sys->{stdin} if there are no ';')  
