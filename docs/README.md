@@ -108,6 +108,8 @@ You can also update any 'system' attribute. The most common to change are:
 &nbsp;&nbsp;&nbsp;Default is `:> `  
 &nbsp;&nbsp;&nbsp;If the game changes `prompt`, it is automatically reset to   
 &nbsp;&nbsp;&nbsp;`prompt_default` at the next action.  
+`sentance_separator` : `some_char`
+&nbsp;&nbsp;&nbsp;Default is `;`
 
 #### magic base node : "__common_actions" (geCommon.pm)
 This contains a list of actions that will be used many times.
