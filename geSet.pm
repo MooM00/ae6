@@ -23,6 +23,7 @@ sub new {
     if (ref $left ne 'HASH') { 
 	if ($left =~ /^(stop|stdin|stdout)$/) { 
 	    $self->{left}{$left}=1; 
+	    push @$stack,'['.$left.']';
 	} else {
 	    $DB::single=1; die "Bad GaMEfile making 'set'; left not a target object  on node '$stack->[0]' (".join("/",reverse @$stack[2..$#{$stack}]).")"; 
 	}
@@ -36,6 +37,7 @@ sub new {
 		$self->{left}{node}=$left->{node}[0]; 
 		$self->{left}{key}=$left->{node}[1];
 		if ($self->{left}{node} eq '__self') { $self->{left}{node}=$stack->[0]; }
+		push @$stack,'[node:'.$self->{left}{node}.':'.$self->{left}{key}.']';
 	    } else {
 		die "Bad GaMEfile making 'set'; left object [".(keys %$left)[0]."] not recognized in node '$stack->[0]' (".join("/",reverse @$stack[2..$#{$stack}]).")" 
 	    }
@@ -67,6 +69,7 @@ sub doSet {
     return if $gme->{set_stop};
 
     my $reply=undef;
+    print "Set: [" . join ("/", keys %{$self->{left}}) . "] : [" . join ("/", keys %{$self->{left}}) . "] as " . $self->{type} ."\n" if $main::DEBUG > 1;
     given ($self->{type}) {
         when ("value") {$reply=join ($gme->{sys}{flatten_array_separator}, map {$_->get//''} @{$self->{right}}); }
         when ("array") {$reply=[ map {$_->get} @{$self->{right}} ]; }

@@ -1,0 +1,399 @@
+{
+    "__meta" : {
+	"game_file" : "Generic Adventure",
+	"game_file_compatability" : "Generic Adventure v1.0",
+	"find_attr" : [ "descr", "detail", "get_descr", "alias", "entry" ],
+	"base_attr" : [ "get_set" ],
+	"room" : "intro",
+	"max_obj_in_input" : "2"
+    },
+    "__common_replies" : {
+	"verb" : { 
+	    "look" : { 
+		"set" : [ [ "stdout", [ "unknown ", { "input" : "part"} ] ] ]
+	    }
+	},
+	"object" : { 
+	    "" : {
+		"set" : [ [ "stdout", [ "what to do with ", { "input" : "object1_name"}, " ?"  ] ] ]
+	    }
+	},
+	"both" : { }
+    },
+    "__common_actions" : {
+	"look" : { 
+	    "if" : [
+		{ "and" : [ [ { "node" : [ "__self", "entry" ] }, "ne", "" ], [ { "sys" : "prev_room" } , "ne", { "sys" : "room" } ] ] },
+		{
+		    "set" : [ [ "stdout" , "array", [ { "node" : [ "__self", "entry" ] } ] ] ] 
+		},
+		{
+		    "set" : [ [ "stdout" , "array", [ { "node" : [ "__self", "descr" ] } ] ] ] 
+		}
+	    ]
+	},
+	"details" : { "alias" : [ "study", "examine", "inspect" ] , "set" : [ [ "stdout" , "array", [ { "node" : [ "__self", "detail" ] } ] ] ] },
+	"get" : { 
+	    "if" : [
+		[
+		    [ { "node" : [ "__self", "get_descr" ] }, "ne", ""  ],
+		    { "set" : [ "stdout", "array", [ {"node" : [ "__self", "get_descr" ] } ] ] },
+		    { "set" : [ [ "stdout", "value", [ "Got ", { "node" : ["__self","name" ]} ] ] ] }
+		],
+		[
+		    [ { "node" : [ "__self", "get_set" ] }, "defined"  ],
+		    { "set" : [ { "node" : [ "__self", "get_set" ] }, "1" ] }
+		]
+	    ],
+	    "set" : [ { "node" : [ "__self", "location" ]} , "__inventory" ]
+	},
+	"drop" : {
+	    "set" : [ 
+		[ { "node" : [ "__self", "location" ]} , { "sys" : "room" } ],
+		[ "stdout" , "sum", [ "Dropped ", "." , { "node" : ["__self","name" ]}  ] ]
+	    ]
+	},
+	"go" : { "set" : [ [ { "sys" : "room" } , "value", { "input" : [ "object1", "target" ] } ] ] }
+    },
+    "__command_quit" : { 
+	"name" : "__command_quit",
+	"type" : "room",
+	"location" : "",
+	"set" : [ [ { "sys" : "force_new_room" } , "value", "1" ], [ { "sys" : "show_exits"}, "value", "0" ], [ { "sys" : "no_input_alert"}, "value", "1" ] ],
+	"if" : [ 
+	    [
+		[ { "input" : "sentance"} , "=~" , "^!q" ],
+		{ 
+		    "descr" : [ "Are you sure you want to quit?" ],
+		    "set" : [ { "sys" : "prompt" }, "value" , "Y/N =>" ]
+		}
+	    ],
+	    [
+		[ { "input" : "sentance"} , "eq" , "y" ],
+		{ 
+		    "descr" : [ "Bye!" ] , 
+		    "set" : [ 
+			[ "stdin" , "value" , "!quit_now"  ]
+		    ]
+		}
+	    ],
+	    [
+		[ { "input" : "sentance"} , "eq" , "n" ],
+		{ 	
+		    "descr" : [ "Quit cancelled." ],
+		    "set" : [ "stdin", "value", "!no_quit" ]
+		}
+	    ]
+	],
+
+	"can" : { "go" : 1, "look" : "1" }
+    },
+    "item_things" : {
+    	"name" : "things",
+	"type" : "item",
+	"location" : "room_start",
+	"if" : [
+	    [ { "node" : [ "__self" , "location" ] }, "eq", "__inventory" ],
+	    {
+		"descr" : [ "Things." ],
+		"detail" : [ "Things you have picked up" ]
+	    },
+	    {
+		"descr" : [ "Some things." ],
+		"detail" : [ "Some things you can pick up." ]
+	    }
+	],
+	"can" : { 
+	    "look" : "1", 
+	    "details" : "1" , 
+	    "get" : "1", 
+	    "drop" : "1", 
+	    "give" : {
+		"if" : [
+		    { "and" : [
+			[ { "sys" : "room" }, "eq", "room_2nd_floor" ], 
+			[ { "input" : "object1_id" }, "eq", "item_things" ], 
+			[ { "input" : "object2_id" }, "eq", "person_bob" ]
+		    ] },
+		    {
+			"if" : [
+			    [ { "node" : [ "item_things", "location" ] }, "eq", "__inventory" ], 
+			    {
+				"set" : [
+				    [ "stdout" , "Bob says 'Thanks' and puts the things in his desk drawer" ],
+				    [ { "sys" : "room" }, "play_again" ]
+				]
+			    },
+			    {
+				"set" : [ "stdout" , "Bob says 'Huh?' and contines his paperwork." ]
+			    }
+			]
+		    },
+		    {
+			"set" : [ "stdout" , "What?" ]
+		    }
+		]
+	    }
+	}
+    },
+    "item_cube_charles" : {
+	"name" : "cube",
+	"alias" : [ "desk", "workspace", "work space" ],
+	"location" : "room_3rd_floor",
+	"descr" : [ "A simple fabric covered cube with 'Charles' on a removable lable near the door" ],
+	"can" : { "look" : "1", "details" : "1" }
+    },
+    "person_charles" : {
+	"name" : "person",
+	"type" : "person",
+	"location" : "room_3rd_floor",
+	"alias" : [ "charles", "man", "worker", "office drone", "drone", "guy" ],
+	"descr" : "A generic office drone",
+	"can" : {
+	    "talk" : {
+		"alias" : "chat",
+		"if" : [
+		    [ { "input": "object1" }, "eq", "charles" ] ,
+		    {
+			"set" : [ "stdout", [ "He glances at you a moment before saying:","","'Well done on completing the game'","In a monotone, then returns to his work" ] ]
+		    },
+		    {
+			"set" : [ "stdout", [ "He barely glances at you before returning to his work" ] ]
+		    }
+		]
+	    }
+	}
+    },
+    "item_cube_bob" : {
+	"name" : "cube",
+	"alias" : [ "desk", "workspace", "work space" ],
+	"location" : "room_2nd_floor",
+	"descr" : "A simple fabric covered cube with 'Bob' on a removable lable near the door",
+	"can" : { "look" : "1", "details" : "1" }
+    },
+    "person_bob" : {
+	"name" : "person",
+	"type" : "person",
+	"location" : "room_2nd_floor",
+	"alias" : [ "bob", "man", "worker", "office drone", "drone", "guy" ],
+	"descr" : "A generic office drone",
+	"can" : {
+	    "talk" : {
+		"alias" : "chat",
+		"if" : [
+		    [ { "input": "object1_word" }, "eq", "bob" ] ,
+		    {
+			"set" : [ "stdout", [ "He glares blankly at you for a moment before saying:",
+			    "'Ralph is off today. You can leave the things with me'",""
+			] ]
+		    },
+		    {
+			"set" : [ "stdout", [ "He barely glances at you before returning to his work" ] ]
+		    }
+		]
+	    },
+	    "give" : {
+		"if" : [
+		    { "and" : [
+			[ { "node" : [ "item_things", "location" ] }, "eq", "__inventory" ], 
+			[ { "input" : "object2_id" }, "eq", "item_things" ], 
+			[ { "input" : "object1_id" }, "eq", "person_bob" ]
+		    ] },
+		    {
+			"set" : [
+			    [ "stdout" , "Bob says 'Thanks' and puts the things in his desk drawer" ],
+			    [ { "sys" : "room" }, "play_again" ]
+			]
+		    },
+		    {
+			"set" : [
+			    [ "stdout" , "Bob says 'Huh?' and contines his paperwork." ]
+			]
+		    }
+		]
+	    }
+	}
+    },
+    "intro" : {
+    	"name" : "intro",
+	"type" : "room",
+	"location" : "",
+	"descr" : [ "Welcome to 'Generic Text Adventure'", "This is a generic text adventure.","","Do not expect great things.","(It's a proof-of-concenpt)","","" ],
+	"exit" : { "__auto" : "room_start" },
+	"can" : { "look" : "1" }
+    },
+    "room_start" : {
+    	"name" : "room_start",
+	"type" : "room",
+	"location" : "",
+	"descr" : [ "You are in a room." ],
+	"detail" : [ "The room is a basic cube with walls, a floor and a ceiling.","The walls are painted a generic mute grey.",
+	    		"The carpet is an uninspiring light beige.", "The door to the north barely holds your attention." ],
+	"if" : [
+	    [
+		[ { "node" : [ "item_things" , "location" ] }, "eq", "room_start" ],
+		{
+		    "exit" : { "door" : { "alias" : [ "north", "exit" ], "target" : "room_start_no_exit" } }
+		},
+		{
+		    "exit" : { "door" : { "alias" : [ "north", "exit" ], "target" : "room_3rd_floor" } }
+		}
+	    ]
+	],
+	"set" : [ { "sys" : "show_content" }, "1" ],
+	"can" : { "look" : "1", "details" : "1", "go" : "1" }
+    },
+    "room_start_no_exit" : {
+    	"name" : "room_start",
+	"type" : "room",
+	"location" : "",
+	"can" : { "look" : "1", "go" : "1" },
+	"descr" : "You can't leave when there are 'things' to do...",
+	"exit" : { "__auto" : "room_start" }
+    },
+    "room_3rd_floor" : {
+    	"name" : "room_3rd_floor",
+	"alias" : "room",
+	"type" : "room",
+	"location" : "",
+	"if" : [
+	    [
+		[ { "private" : "counter" }, "==", "1" ],
+		{
+		    "set" : [ { "sys" : "show_content" }, "0" ],
+		    "entry" : [ "You exit into an office. There is a party celebrating your completion of the game.",
+			"A Banner printed in brown-on-grey reads 'You have finished'",
+			"Several people in drab buisness atire mull somberly about.","",
+			"A lady says to you in a dull monotone:",
+			"'If you want to play again, go back and put the things down.'",
+			"With no change in tone, she continues:",
+			"'Give the things to Ralph in facilities when you are done'",
+			"",
+			"She ambles off.","",
+			"There is a door to the south where games are tested, and a lift to the west to access the rest of the building"
+		    ],
+		    "descr" : [ "An office filled with dull office cubes and decorated in plain, generic shades of drab.",
+			"Several people are milling about. Technically it's a party to celebrate your completing the game.",
+			"There is a door to the south where games are tested, and a lift to the west to access the rest of the building"
+		    ]
+		}
+	    ],
+	    [
+		[ { "private" : "counter" }, "==", "2" ],
+		{
+		    "set" : [ { "sys" : "show_content" }, "0" ],
+		    "entry" : [ "You return to the office with the party.",
+			"A few people still stand around aimlessly."
+		    ],
+		    "descr" : [ "An office filled with dull office cubes and decorated in plain, generic shades of drab.",
+			"A few people are still milling about. Technically the party to celebrate your completing the game is winding down."
+		    ]
+		}
+	    ],
+	    [
+		[ { "private" : "counter" }, "==", "3" ],
+		{
+		    "set" : [ { "sys" : "show_content" }, "1" ],
+		    "entry" : [ "You return to the office with the party.",
+			"Or where the party was. It is now deserted except for someone siting in a dull office cube, doing paperwork."
+		    ],
+		    "descr" : [ "An office filled with dull office cubes and decorated in plain, generic shades of drab.",
+			"There is one person sitting in a dull office cube, doing paperwork."
+		    ]
+		}
+	    ],
+	    [
+		[ { "private" : "counter" }, ">", "3" ],
+		{
+		    "set" : [ { "sys" : "show_content" }, "1" ],
+		    "descr" : [ "3rd floor: Entertainment. A bland space filled with a grid of drab office cubes." ]
+		}
+	    ]
+	],
+	"set" : [
+	    [ { "private" : "counter" }, "sum", [{ "private" : "counter" },"+","1"] ]
+	],
+	"can" : { "look" : "1", "go" : "1" },
+	"exit" : { 
+	    "door" : { "alias" : [ "south" ] , "target" : "room_start" },
+	    "lift" : { "alias" : [ "west", "elevator" ] , "target" : "room_lift" }
+	}
+    },
+    "room_lift" : {
+	"name" : "lift",
+	"type" : "room",
+	"location" : "",
+	"entry" : "A dull 'ding' acompanies the doors sliding open for you to enter the lift.",
+	"descr" : "A lift. Or elevator. a drab cube with four buttons.",
+	"detail" : [ "Technically it is a cuboid, being taller than it is wide.","This does not make it interesting." ],
+	"can" : { "look" : "1", "details" : "1", "go" : "1" },
+	"exit" : { "1" : "room_1st_floor", "2" : "room_2nd_floor", "3" : "room_3rd_floor", "4" : "room_4th_floor" }
+    },
+    "room_4th_floor" : {
+	"name" : "room_4th_floor",
+	"type" : "room",
+	"location" : "",
+	"can" : { "look" : "1", "go" : "1" },
+	"descr" : [ 
+	    "This is the exective suite.", "","The doors open to a sumptuouse hallway bedecked with marble pillars and intricate, lush carpeting.",
+	    "Despite the luxury, it still maintains an air of generic platitude","","","The doors close again with you still in the lift.",
+	    "The executive suite is not for the likes of you.","",""
+	],
+	"exit" : { "__auto" : "room_lift" }
+    },
+    "room_1st_floor" : {
+	"name" : "room_1st_floor",
+	"type" : "room",
+	"location" : "",
+	"can" : { "look" : "1", "go" : "1" },
+	"descr" : [ 
+	    "This is the exit to the building.", "","As the doors open, you see a guard at a plain table that acts as teh security desk.",
+	    "The guard is glaring at the things still in your hands.",
+	    "You will not be allowed out with company property.","","",
+	    "The doors close again with you still in the lift."
+	],
+	"exit" : { "__auto" : "room_lift" }
+    },
+    "room_2nd_floor" : {
+	"name" : "room_2nd_floor",
+	"type" : "room",
+	"location" : "",
+	"can" : { "look" : "1", "go" : "1" },
+	"descr" : [ 
+	    "This level is the Personnel division.","It is indistinct from the 3rd floor, except that it lacks the extra room for testing games.",
+	    "There is a lift to the West"
+	],
+	"exit" : { "lift" : { "alias" : [ "west", "elevator" ] , "target" : "room_lift" } }
+    },
+    "play_again" : {
+	"name" : "play_again",
+	"type" : "room",
+	"location" : "",
+	"set" : [ { "sys" : "show_exits" } , "0" ],
+	"descr" : [ "","","GAME OVER!","","\u0000 3", "", "", "Would you like to play again? Y or N?" ],
+	"can" : { "look" : "1", "go" : "1" },
+	"exit" : { 
+	    "Y" : { "alias" : [ "yes", "again", "play again", "restart", "redo" ], "target" : "restart" },
+	    "N" : { "alias" : [ "no", "end", "exit", "quit", "bye" ], "target" : "end" }
+	}
+    },
+    "end" : {
+	"name" : "end",
+	"type" : "room",
+	"location" : "",
+	"descr" : [ "","","Thank you for playing!","Goodbye!" ],
+	"can" : { "look" : "1" },
+	"set" : [ "stdin" , "value" , "!quit_now"  ]
+    },
+    "restart" : {
+	"name" : "restart",
+	"type" : "room",
+	"location" : "",
+	"set" : [
+	    [ { "sys" : "show_exits" } , "1" ],
+	    [ { "sys" : "show_content" } , "1" ],
+	    [ { "node" : [ "item_things", "location" ]} , "room_start" ]
+	],
+	"exit" : { "__auto" : "room_start" }
+    }
+}

@@ -236,17 +236,18 @@ sub updateCache {
 	    $DB::single=1 unless defined $name;
             my $alias = [ $item->get('alias') ];
             my $can   = { $item->getCan };
-            $cache->{room}{$item_id}      = { name => $name, location => $loc, alias => $alias, can => $can, node => $item } if $item_id eq $self->{sys}{room};
-            $cache->{content}{$item_id}   = { name => $name, location => $loc, alias => $alias, can => $can, node => $item } if $loc eq $self->{sys}{room};
-            $cache->{inventory}{$item_id} = { name => $name, location => $loc, alias => $alias, can => $can, node => $item } if $loc eq '__inventory';
+            $cache->{room}{$item_id}      = { name => $name, location => $loc, alias => $alias, can => $can, id => $item_id, node => $item } if $item_id eq $self->{sys}{room};
+            $cache->{content}{$item_id}   = { name => $name, location => $loc, alias => $alias, can => $can, id => $item_id, node => $item } if $loc eq $self->{sys}{room};
+            $cache->{inventory}{$item_id} = { name => $name, location => $loc, alias => $alias, can => $can, id => $item_id, node => $item } if $loc eq '__inventory';
             map { $cache->{actions}{ lc $_ } = { name => $_, alias => $can->{$_}, implied_object => $item_id, implied_object_node => $item } } keys %$can;
         }
     }
 
+    #TODO: make exit alias more like other alias.
     my %exits = $cache->{room}{ $self->{sys}{room} }{node}->getExit;
     while ( my ( $name, $target ) = each %exits ) {
         if ( $name eq '__auto' ) { $cache->{auto_exit} = $target; next; }
-        $cache->{exits}{ lc $name } = { name => $name, alias => [], target => $target };
+        $cache->{exits}{ lc $name } = { name => $name, alias => [], id => $name, target => $target };
     }
 }
 
@@ -282,6 +283,7 @@ sub ParseInput {
     #grab all 'object's in reach, and their aliases: content, inventory
     map {
         while ( my ( $name, $node ) = each %$_ ) {
+	    $name=$node->{name};
 	    $name=~s/^\0//; #Exit alias
 	    push @words, {word=>$name, actual=> $name, type=>'object', target=>$node, length=>length $name};
 	    map {
@@ -344,7 +346,7 @@ sub ParseInput {
 	    if (scalar keys %found == 1) {
 		my ($full_text)=keys %found;
 		my $found=$found{$full_text};
-		print "   Matched [$full_text] from {$found->{word}} [$part]\n" if $main::DEBUG;
+		print "   Matched [$full_text] from {$found->{word}}($found->{actual}) [$part]\n" if $main::DEBUG;
 		if ($found->{type} eq 'verb') {
 		    print "  It's a verb\n" if $main::DEBUG;
 		    if ( defined $self->{input}{verb} ) {
@@ -386,6 +388,7 @@ sub ParseInput {
 		    $self->{input}{ 'object' . $ctr . '_raw' }  = $part;
 		    $self->{input}{ 'object' . $ctr . '_word' } = $found->{word};
 		    $self->{input}{ 'object' . $ctr . '_name' } = $found->{actual};
+		    $self->{input}{ 'object' . $ctr . '_id' }   = $found->{target}{id};
 		    if ( $ctr > $self->{sys}{max_obj_in_input} ) {
 			push @{ $self->{stdout} },
 			  [
@@ -405,7 +408,7 @@ sub ParseInput {
 			return;
 		    }
 		    $ctr++;
-		    if ( (defined $cache->{exits}{$full_text} or defined $cache->{exits}{'\0'.$full_text})and $self->{sys}{direction_only_implies_go} ) { 
+		    if ( (defined $cache->{exits}{$full_text} or defined $cache->{exits}{"\0".$full_text}) and $self->{sys}{direction_only_implies_go} ) { 
 			print " Direction ($full_text), implies go '$self->{sys}{direction_only_verb}'\n" if $main::DEBUG;
 			$self->{input}{verb} //= $self->{sys}{direction_only_verb}; 
 		    }
@@ -446,6 +449,23 @@ sub getRoomNode { my $self = shift; my $room = $self->{sys}{room}; return wantar
 
 sub isNewRoom { return $_[0]->{sys}{room} ne $_[0]->{sys}{prev_room}; }
 
+sub ShowExits {
+    my $self=shift; 
+    my $cache=$self->{cache};
+    if ( ( scalar keys %{ $cache->{exits} } ) and $self->{sys}{show_exits} ) {
+        push @{ $self->{stdout} }, "", "Visible exits:  " . join( ", ", sort { lc $a cmp lc $b } grep { ! /^\0/ } keys %{ $cache->{exits} } );
+    }
+}
+
+sub ShowContent {
+    my $self=shift; 
+    my $cache=$self->{cache};
+    if ( scalar keys %{ $cache->{content} }  and $self->{sys}{show_content} ) {
+        push @{ $self->{stdout} }, "", "There is: " . join( ", ", sort { lc $a cmp lc $b } map { $_->{name} } values %{ $cache->{content} } );
+    }
+
+}
+
 sub checkRoom {
     my $self = shift;
     my $cache= $self->{cache};
@@ -454,12 +474,12 @@ sub checkRoom {
     my $old_prev = $self->{sys}{prev_room};
 
     #trigger room stuff if we are allowed to
+
+    print "Room set [$room->{stack}[0]]\n" if $self->{sys}{auto_set_room} and $main::DEBUG > 1;
     $room->doSet if $self->{sys}{auto_set_room};
 
     #update the cache now, if we are allowed to
     $self->updateCache if $self->{sys}{refresh_cache_on_enter_room};
-
-    $self->{sys}{prev_room} = $self->{sys}{room} unless $old_prev ne $self->{sys}{prev_room};    #Just in case it is beig forged, maintain the 'fake'.
 
     #if we are 'silent' or not automatically looking, we are now done. But still auto-exit if allowed and needed.
     if ( $self->{sys}{silent} or ( not $self->{sys}{auto_look_room} ) ) {
@@ -476,14 +496,9 @@ sub checkRoom {
     $room->do( $self->{sys}{auto_look_room_verb} );
 
     #... and what's in it.
-    if ( scalar keys %{ $cache->{content} }  and $self->{sys}{show_content} ) {
-        push @{ $self->{stdout} }, "", "There is: " . join( ", ", sort { lc $a cmp lc $b } map { $_->{name} } values %{ $cache->{content} } );
-    }
-
+    ShowContent($self);
     #.. and how to get out... if it's clear. And we are allowed to show it.
-    if ( ( scalar keys %{ $cache->{exits} } ) and $self->{sys}{show_exits} ) {
-        push @{ $self->{stdout} }, "", "Visible exits:  " . join( ", ", sort { lc $a cmp lc $b } grep { ! /^\0/ } keys %{ $cache->{exits} } );
-    }
+    ShowExits($self);
 
     #.. lastly; auto exit to next room?
     if ($self->{sys}{honour_auto_exit} and defined $cache->{auto_exit}) {
@@ -491,6 +506,8 @@ sub checkRoom {
 	$self->updateCache if $self->{sys}{refresh_on_auto_exit};
 	$self->checkRoom;
     }
+    #.. only now; change prev_room.
+    $self->{sys}{prev_room} = $self->{sys}{room} unless $old_prev ne $self->{sys}{prev_room};    #Just in case it is beig forged, maintain the 'fake'.
 }
 
 sub doOutput {

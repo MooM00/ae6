@@ -18,13 +18,14 @@ sub new {
 
     if (ref $data ne 'HASH') {$DB::single=1; die "Bad GaMEfile; 'can' should be an object in node '$stack->[0] (".join("/",reverse @$stack[2..$#{$stack}]).")"; }
     while (my ($action,$data) = each %$data) {
+	my $a_stack=[@$stack,'['.$action.']'];
 	if ($data eq "1") {
 	    my $new_action=deepcopy($common->{$action});
-	    $self->{attr}{$action}=[geNode->new($stack,$new_action,$common)];
+	    $self->{attr}{$action}=[geNode->new($a_stack,$new_action,$common)];
 	} elsif (ref $data eq 'ARRAY') {
-	    $self->{attr}{$action}=[ map { geNode->new($stack,$_,$common) } @$data ];
+	    $self->{attr}{$action}=[ map { geNode->new($a_stack,$_,$common) } @$data ];
 	} else {
-	    $self->{attr}{$action}=[geNode->new($stack,$data,$common)];
+	    $self->{attr}{$action}=[geNode->new($a_stack,$data,$common)];
 	}
     }
     return bless $self,$class;

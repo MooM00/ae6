@@ -17,6 +17,7 @@ sub new {
     my $data=shift;
     my $common=shift;
     my $base=(caller)[0] eq 'gme';
+    my $itr=0;
     my $self={
 	stack=>$stack,
 	attr=>{},
@@ -40,9 +41,18 @@ sub new {
 	}
     } grep {!/^(if|set|can|exit|attr)$/} keys %$data;
 
-    # 'if' and 'set' don't need to be arrays of <if> and <set> in the GmE file, but we make them arrays to simplify things later.
-    if (defined $data->{if} ) { $self->{if}  =[ grep {defined} map { geIf->new ($stack,$_,$common) } (ref $data->{if }[1] eq 'HASH') ? ($data->{if }) : @{$data->{if }} ]; }
-    if (defined $data->{set}) { $self->{set} =[ grep {defined} map { geSet->new($stack,$_,$common) } (ref $data->{set}[0] eq 'ARRAY') ?  @{$data->{set}} : ($data->{set}) ]; }
+    # 'if' and 'set' don't need to be arrays of <if> and <set> in the GaME file, but we make them arrays to simplify things later.
+    if (defined $data->{if} ) { 
+	$self->{if}  =[ 
+	    grep {defined} map { geIf->new ([@$stack,'['.$itr++.']'],$_,$common); } (ref $data->{if }[1] eq 'HASH') ? ($data->{if }) : @{$data->{if }} 
+	]; 
+    }
+    $itr=0;
+    if (defined $data->{set}) { 
+	$self->{set} =[ 
+	    grep {defined} map { geSet->new([@$stack,'['.$itr++.']'],$_,$common); } (ref $data->{set}[0] eq 'ARRAY') ?  @{$data->{set}} : ($data->{set}) 
+	]; 
+    }
     # 'can' and 'exit' must have unique 
     if (defined $data->{can}) { $self->{can} =        geCan->new($stack,$data->{can },$common); }
     if (defined $data->{exit}){ $self->{exit}=       geExit->new($stack,$data->{exit},$common); }
@@ -101,8 +111,9 @@ sub getExit {
 sub doSet {
     my $self=shift;
     my $action=shift;
+    print "[" . $self->{stack}[0] . " ] " . ($action//'<noack>') . ": do\n" if $main::DEBUG>1;
 
-    map { $_->doSet($action) } @{$self->{set}}, @{$self->{if}};
+    map { $_->doSet() } @{$self->{set}}, @{$self->{if}};
 }
 
 sub do {

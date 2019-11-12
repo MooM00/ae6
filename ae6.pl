@@ -153,11 +153,12 @@ while (1) {
 	    }
 	} elsif ("cheat"=~/^$command/i) {
 	    if (not defined $par) {
-		push @{$IF->{stdout}}, [ "info", "Usage: !cheat [words|rooms|items|all]" ], [ "info", "Where:" ],
+		push @{$IF->{stdout}}, [ "info", "Usage: !cheat [words|rooms|items|all|sys]" ], [ "info", "Where:" ],
 			[ "info", "<words>   shows all words currenlty available" ],
 			[ "info", "<rooms>   lists all rooms in the game" ], 
 			[ "info", "<items>   lists every item in the game" ],
-		    	[ "info", "<all>     lists every object in the game" ];
+		    	[ "info", "<all>     lists every object in the game" ],
+		    	[ "info", "<sys>     Peek at system values" ];
 	    } elsif ("words"=~/^$par/i) {
 		push @{$IF->{stdout}}, [ "info", "All Currently understood words:" ];
 		push @{$IF->{stdout}}, (sort { lc $a cmp lc $b } @{$IF->{cache}{words}});
@@ -171,6 +172,9 @@ while (1) {
 	    } elsif ("all"=~/^$par/i) {
 		push @{$IF->{stdout}}, [ "info", "All defined rooms and items in this GaMEfile:" ];
 		push @{$IF->{stdout}}, (sort { lc $a cmp lc $b } map { $_->{attr}{name} . "  [" . $_->{attr}{type} . "]" } values %{$IF->{gme}});
+	    } elsif ("sys"=~/^$par/i) {
+		push @{$IF->{stdout}}, [ "info", "Current SYStem values" ];
+		push @{$IF->{stdout}}, (sort { lc $a cmp lc $b } map { $_ . "  [" . $IF->{sys}{$_} . "]" } keys %{$IF->{sys}});
 	    } 
 	}
 
@@ -181,7 +185,9 @@ while (1) {
 	    not defined $IF->{input}{part} and
 	    $IF->{sys}{look_implies_room}
 	) { 
-	$IF->{sys}{prev_room}=''; 
+	$IF->{gme}{ $IF->{sys}{room} }->do($IF->{input}{verb}) ;
+	$IF->ShowContent;
+	$IF->ShowExits;
 
     } elsif (
 	#"Inventory" does what you expect.
@@ -221,6 +227,7 @@ while (1) {
 	if (defined $IF->{input}{implied_object_node}) {
 	    $IF->{input}{implied_object_node}->do($IF->{input}{verb});
 	} elsif ($IF->{common_replies}->verb($IF->{input}{verb})) {
+	    print "TODO!\n";
 	    1; #do the common thing.
 	} else { 
 	    push @{$IF->{stdout}},$IF->{input}{verb_name}." what?" 
