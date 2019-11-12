@@ -49,9 +49,12 @@ sub test {
     if (defined $self->{not}) { return not $self->{not}->test(); }
 
     my $left= $self->{left}->get;
+    if (ref $left eq 'ARRAY') { $left=join("",@$left); }
     if ($self->{oper} eq 'defined') { return defined $left; }
     if ($self->{oper} eq 'undef') { return not defined $left; }
     my $right=$self->{right}->get;
+    if (ref $right eq 'ARRAY') { $right=join("",@$right); }
+    print "Test: [" . $self->{stack}[0] . "] : (" . ($left//'<unk>') . ") " . $self->{oper} . " (". ($right//'<unk>') . ")\n" if $main::DEBUG > 1;
     given ($self->{oper}) {
 	when ('==') { return ($left//0) == ($right//0); }
 	when ('!=') { return ($left//0) != ($right//0); }

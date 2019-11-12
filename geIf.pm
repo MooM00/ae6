@@ -14,14 +14,16 @@ sub new {
     my $data=shift;
     my $common=shift;
     my $self={ stack=>$stack };
+    my $itr=0;
 
     if (ref $data ne 'ARRAY') { $DB::single=1; die "Bad GaMEfile 'if' should be an array in node '$stack->[0]' (".join("/",reverse @$stack[2..$#{$stack}]).")"; }
     $data->[2]//=[]; # you don't have to supply an 'else'
     if (@$data != 3) { $DB::single=1; die "Bad GaMEfile 'if' must have 2 or 3 elements in node '$stack->[0]' (".join("/",reverse @$stack[2..$#{$stack}]).")"; }
     $self->{test}=geTest->new($stack,$data->[0]);
     #coerce evrything to arrays to simplify things later
-    $self->{then}=[ map { geNode->new($stack,$_,$common) } (ref $data->[1] eq 'HASH') ? ($data->[1]) : @{$data->[1]} ];
-    $self->{else}=[ map { geNode->new($stack,$_,$common) } (ref $data->[2] eq 'HASH') ? ($data->[2]) : @{$data->[2]} ];
+    $self->{then}=[ map { geNode->new([@$stack,'['.$itr++.']'],$_,$common); } (ref $data->[1] eq 'HASH') ? ($data->[1]) : @{$data->[1]} ];
+    $itr=0;
+    $self->{else}=[ map { geNode->new([@$stack,'['.$itr++.']'],$_,$common); } (ref $data->[2] eq 'HASH') ? ($data->[2]) : @{$data->[2]} ];
 
     return bless $self,$class;
 }
