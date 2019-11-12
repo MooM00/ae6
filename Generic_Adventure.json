@@ -153,7 +153,7 @@
 	    "talk" : {
 		"alias" : "chat",
 		"if" : [
-		    [ { "input": "object1" }, "eq", "charles" ] ,
+		    [ { "input": "object1_word" }, "eq", "charles" ] ,
 		    {
 			"set" : [ "stdout", [ "He glances at you a moment before saying:","","'Well done on completing the game'","In a monotone, then returns to his work" ] ]
 		    },
@@ -347,7 +347,7 @@
 	"location" : "",
 	"can" : { "look" : "1", "go" : "1" },
 	"descr" : [ 
-	    "This is the exit to the building.", "","As the doors open, you see a guard at a plain table that acts as teh security desk.",
+	    "This is the exit to the building.", "","As the doors open, you see a guard at a plain table that acts as the security desk.",
 	    "The guard is glaring at the things still in your hands.",
 	    "You will not be allowed out with company property.","","",
 	    "The doors close again with you still in the lift."
