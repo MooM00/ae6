@@ -14,7 +14,9 @@ To start a story and automatically run several commands:
 ```
 perl ae6.pl -f TestStoryOne.json look;get all;go north;n;n;duck;enchant lantern
 ```
-Note that you can use ';' in the game (or you can change it to another character) to provide multiple commands at once.
+Note that you can also use ';' _in_ the game (or you can change it to another character) to provide multiple commands at once.
+
+Try out the included [Generic Adventure](https://moom00.github.io/ae6/ae6.html) to see this running in WebPerl
 
 ### Did someone say [WebPerl](https://webperl.zero-g.net/)
 Yes. Yes I did.
